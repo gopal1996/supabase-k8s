@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sb-auth-secret
+  namespace: supabase-pg
+  labels:
+    app: postgres
+type: Opaque
+stringData:
+  API_EXTERNAL_URL: http://kong:8000
+  GOTRUE_DB_DATABASE_URL: postgres://postgres:your-super-secret-and-long-postgres-password@postgres-db-lb.supabase-pg.svc.cluster.local:5432/auth?search_path=auth
+  GOTRUE_DB_DRIVER: postgres
+  GOTRUE_API_HOST: 0.0.0.0
+  GOTRUE_API_PORT: "9999"
+  GOTRUE_JWT_SECRET: "#0r@ngeSc@pe#::your-super-secret-jwt-token-with-at-least-32-characters-long"
+  GOTRUE_SITE_URL: http://studio:3000
+  GOTRUE_SMTP_ADMIN_EMAIL: admin@example.com
+  GOTRUE_SMTP_HOST: mail
+  GOTRUE_SMTP_PASS: fake_mail_password
+  GOTRUE_SMTP_PORT: "2500"
+  GOTRUE_SMTP_SENDER_NAME: fake_sender
+  GOTRUE_SMTP_USER: fake_mail_user
+---
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: sb-auth-config
+#   namespace: supabase-pg
+#   labels:
+#     app: postgres
+# data:
+#   GOTRUE_DISABLE_SIGNUP: "false"
+#   GOTRUE_EXTERNAL_EMAIL_ENABLED: "false"
+#   GOTRUE_EXTERNAL_PHONE_ENABLED: "false"
+#   GOTRUE_JWT_ADMIN_ROLES: service_role
+#   GOTRUE_JWT_AUD: authenticated
+#   GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+#   GOTRUE_JWT_EXP: "3600"
+#   GOTRUE_MAILER_AUTOCONFIRM: "false"
+#   GOTRUE_MAILER_URLPATHS_CONFIRMATION: /auth/v1/verify
+#   GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: /auth/v1/verify
+#   GOTRUE_MAILER_URLPATHS_INVITE: /auth/v1/verify
+#   GOTRUE_MAILER_URLPATHS_RECOVERY: /auth/v1/verify
+#   GOTRUE_SMS_AUTOCONFIRM: "false"

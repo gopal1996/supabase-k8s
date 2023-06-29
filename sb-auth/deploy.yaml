@@ -1,0 +1,163 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: auth
+  name: auth
+  namespace: supabase-pg
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: auth
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: auth
+    spec:
+      containers:
+        - env:
+            - name: API_EXTERNAL_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sb-auth-secret
+                  key: API_EXTERNAL_URL
+            - name: GOTRUE_API_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: sb-auth-secret
+                  key: GOTRUE_API_HOST
+            - name: GOTRUE_API_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: sb-auth-secret
+                  key: GOTRUE_API_PORT
+            - name: GOTRUE_DB_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sb-auth-secret
+                  key: GOTRUE_DB_DATABASE_URL
+            - name: GOTRUE_DB_DRIVER
+              valueFrom:
+                secretKeyRef:
+                  name: sb-auth-secret
+                  key: GOTRUE_DB_DRIVER
+            - name: GOTRUE_DISABLE_SIGNUP
+              valueFrom:
+                configMapKeyRef:
+                  name: sb-auth-config
+                  key: GOTRUE_DISABLE_SIGNUP
+            - name: GOTRUE_EXTERNAL_EMAIL_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: sb-auth-config
+                  key: GOTRUE_EXTERNAL_EMAIL_ENABLED
+            - name: GOTRUE_EXTERNAL_PHONE_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: sb-auth-config
+                  key: GOTRUE_EXTERNAL_PHONE_ENABLED
+            - name: GOTRUE_JWT_ADMIN_ROLES
+              valueFrom:
+                configMapKeyRef:
+                  name: sb-auth-config
+                  key: GOTRUE_JWT_ADMIN_ROLES
+            - name: GOTRUE_JWT_AUD
+              valueFrom:
+                configMapKeyRef:
+                  name: sb-auth-config
+                  key: GOTRUE_JWT_AUD
+            - name: GOTRUE_JWT_DEFAULT_GROUP_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: sb-auth-config
+                  key: GOTRUE_JWT_DEFAULT_GROUP_NAME
+            - name: GOTRUE_JWT_EXP
+              valueFrom:
+                configMapKeyRef:
+                  name: sb-auth-config
+                  key: GOTRUE_JWT_EXP
+            - name: GOTRUE_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sb-auth-secret
+                  key: GOTRUE_JWT_SECRET
+            - name: GOTRUE_MAILER_AUTOCONFIRM
+              valueFrom:
+                configMapKeyRef:
+                  name: sb-auth-config
+                  key: GOTRUE_MAILER_AUTOCONFIRM
+            - name: GOTRUE_MAILER_URLPATHS_CONFIRMATION
+              valueFrom:
+                configMapKeyRef:
+                  name: sb-auth-config
+                  key: GOTRUE_MAILER_URLPATHS_CONFIRMATION
+            - name: GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE
+              valueFrom:
+                configMapKeyRef:
+                  name: sb-auth-config
+                  key: GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE
+            - name: GOTRUE_MAILER_URLPATHS_INVITE
+              valueFrom:
+                configMapKeyRef:
+                  name: sb-auth-config
+                  key: GOTRUE_MAILER_URLPATHS_INVITE
+            - name: GOTRUE_MAILER_URLPATHS_RECOVERY
+              valueFrom:
+                configMapKeyRef:
+                  name: sb-auth-config
+                  key: GOTRUE_MAILER_URLPATHS_RECOVERY
+            - name: GOTRUE_SITE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sb-auth-secret
+                  key: GOTRUE_SITE_URL
+            - name: GOTRUE_SMS_AUTOCONFIRM
+              valueFrom:
+                configMapKeyRef:
+                  name: sb-auth-config
+                  key: GOTRUE_SMS_AUTOCONFIRM
+            - name: GOTRUE_SMTP_ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: sb-auth-secret
+                  key: GOTRUE_SMTP_ADMIN_EMAIL
+            - name: GOTRUE_SMTP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: sb-auth-secret
+                  key: GOTRUE_SMTP_HOST
+            - name: GOTRUE_SMTP_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: sb-auth-secret
+                  key: GOTRUE_SMTP_PASS
+            - name: GOTRUE_SMTP_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: sb-auth-secret
+                  key: GOTRUE_SMTP_PORT
+            - name: GOTRUE_SMTP_SENDER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: sb-auth-secret
+                  key: GOTRUE_SMTP_SENDER_NAME
+            - name: GOTRUE_SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sb-auth-secret
+                  key: GOTRUE_SMTP_USER
+          image: supabase/gotrue:v2.62.1
+          name: supabase-auth
+          resources: {}
+      restartPolicy: Always
+status: {}

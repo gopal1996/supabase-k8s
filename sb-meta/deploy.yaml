@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: meta
+  name: meta
+  namespace: supabase-pg
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: meta
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: meta
+    spec:
+      containers:
+        - env:
+            - name: PG_META_DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: sb-meta-secret
+                  key: PG_META_DB_HOST
+            - name: PG_META_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: sb-meta-secret
+                  key: PG_META_DB_NAME
+            - name: PG_META_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sb-meta-secret
+                  key: PG_META_DB_PASSWORD
+            - name: PG_META_DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: sb-meta-secret
+                  key: PG_META_DB_PORT
+            - name: PG_META_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sb-meta-secret
+                  key: PG_META_DB_USER
+            - name: PG_META_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: sb-meta-secret
+                  key: PG_META_PORT
+          image: supabase/postgres-meta:v0.66.3
+          name: supabase-meta
+          resources: {}
+      restartPolicy: Always
+status: {}

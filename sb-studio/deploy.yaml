@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: studio
+  name: studio
+  namespace: supabase-pg
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: studio
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: studio
+    spec:
+      containers:
+        - env:
+          - name: DEFAULT_ORGANIZATION
+            valueFrom:
+              secretKeyRef:
+                name: sb-studio-secret
+                key: DEFAULT_ORGANIZATION
+          - name: DEFAULT_PROJECT
+            valueFrom:
+              secretKeyRef:
+                name: sb-studio-secret
+                key: DEFAULT_PROJECT
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: sb-studio-secret
+                key: POSTGRES_PASSWORD
+          - name: STUDIO_PG_META_URL
+            valueFrom:
+              secretKeyRef:
+                name: sb-studio-secret
+                key: STUDIO_PG_META_URL
+          - name: SUPABASE_ANON_KEY
+            valueFrom:
+              secretKeyRef:
+                name: sb-studio-secret
+                key: SUPABASE_ANON_KEY
+          - name: SUPABASE_REST_URL
+            valueFrom:
+              secretKeyRef:
+                name: sb-studio-secret
+                key: SUPABASE_REST_URL
+          - name: SUPABASE_SERVICE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: sb-studio-secret
+                key: SUPABASE_SERVICE_KEY
+          - name: SUPABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: sb-studio-secret
+                key: SUPABASE_URL
+          image: supabase/studio:latest
+          name: supabase-studio
+          ports:
+            - containerPort: 3000
+          resources: {}
+      restartPolicy: Always
+status: {}

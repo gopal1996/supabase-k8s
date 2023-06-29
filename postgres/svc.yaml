@@ -1,0 +1,28 @@
+#apiVersion: v1
+#kind: Service # Create service
+#metadata:
+#  name: postgres # Sets the service name
+#  namespace: supabase-pg
+#  labels:
+#    app: postgres # Defines app to create service for
+#spec:
+#  type: NodePort # Sets the service type
+#  ports:
+#    - port: 5432 # Sets the port to run the postgres application
+#  selector:
+#    app: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-db-lb
+  namespace: supabase-pg
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+spec:
+  selector:
+    app: postgres
+  type: LoadBalancer
+  ports:
+  - port: 5432
+    targetPort: 5432

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    group: supabase
+  name: studio
+  namespace: supabase-pg
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 3000
+      protocol: TCP
+      name: https
+  selector:
+    io.kompose.service: studio

@@ -1,0 +1,42 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-studio-alb
+  namespace: supabase-pg
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/group.name: "supabase.alb"
+    alb.ingress.kubernetes.io/group.order: '1'
+    alb.ingress.kubernetes.io/scheme : internet-facing
+    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-west-2:771153997691:certificate/7cd38249-4159-4fe6-959b-8afc9314e7b6
+
+
+    alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:us-west-2:771153997691:regional/webacl/mch-acl-p001/b183b8e0-eb82-44d8-b322-1227aa53dd21
+
+    alb.ingress.kubernetes.io/auth-type: oidc
+    alb.ingress.kubernetes.io/auth-scope: openid https://www.googleapis.com/auth/user.organization.read
+    alb.ingress.kubernetes.io/auth-session-timeout: '36000'
+    alb.ingress.kubernetes.io/auth-session-cookie: AWSELBAuthSessionCookie
+    alb.ingress.kubernetes.io/auth-on-unauthenticated-request: authenticate
+    alb.ingress.kubernetes.io/auth-idp-oidc: '{
+        "Issuer": "https://accounts.google.com",
+        "AuthorizationEndpoint": "https://accounts.google.com/o/oauth2/v2/auth",
+        "TokenEndpoint": "https://oauth2.googleapis.com/token",
+        "UserInfoEndpoint": "https://openidconnect.googleapis.com/v1/userinfo",
+        "SecretName": "google-oauth-client"
+      }'
+spec:
+  rules:
+  - host: "rtdb-studio.kissflow.co.in"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: studio
+            port:
+              number: 80

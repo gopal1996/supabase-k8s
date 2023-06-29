@@ -1,0 +1,47 @@
+# This YAML file shows how to deploy the snapshot controller
+
+# The snapshot controller implements the control loop for CSI snapshot functionality.
+# It should be installed as part of the base Kubernetes distribution in an appropriate
+# namespace for components implementing base system functionality. For installing with
+# Vanilla Kubernetes, kube-system makes sense for the namespace.
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: snapshot-controller
+  namespace: kube-system
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: snapshot-controller
+  # the snapshot controller won't be marked as ready if the v1 CRDs are unavailable
+  # in #504 the snapshot-controller will exit after around 7.5 seconds if it
+  # can't find the v1 CRDs so this value should be greater than that
+  minReadySeconds: 15
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: snapshot-controller
+    spec:
+      serviceAccountName: snapshot-controller
+      containers:
+        - name: snapshot-controller
+          image: registry.k8s.io/sig-storage/snapshot-controller:v6.1.0
+          args:
+            - "--v=5"
+            - "--leader-election=true"
+          imagePullPolicy: IfNotPresent
+eksctl create addon --name aws-ebs-csi-driver --cluster mch-aws-eks-cluster-p001 --service-account-role-arn arn:aws-us-gov:iam::771153997691:role/AmazonEKS_EBS_CSI_DriverRole
+aws eks create-addon --cluster-name mch-aws-eks-cluster-p001 --addon-name aws-ebs-csi-driver --service-account-role-arn arn:aws-us-gov:iam::771153997691:role/AmazonEKS_EBS_CSI_DriverRole
+
+Wed Oct 26 21:02:54 UTC 2022
+Wed Oct 26 21:02:59 UTC 2022
+Wed Oct 26 21:03:04 UTC 2022
+Wed Oct 26 21:03:09 UTC 2022

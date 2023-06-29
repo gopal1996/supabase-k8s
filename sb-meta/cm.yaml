@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sb-kong-secret
+  namespace: supabase-pg
+  labels:
+    app: postgres
+type: Opaque
+data:
+  PG_META_DB_HOST: cG9zdGdyZXMtZGItbGI=
+  PG_META_DB_PORT: NTQzMg==
+  PG_META_DB_NAME: cG9zdGdyZXM=
+  PG_META_DB_USER: cG9zdGdyZXM=
+  PG_META_DB_PASSWORD: eW91ci1zdXBlci1zZWNyZXQtYW5kLWxvbmctcG9zdGdyZXMtcGFzc3dvcmQ=
+  PG_META_PORT: ODA4MA==

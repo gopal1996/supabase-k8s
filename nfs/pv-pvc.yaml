@@ -1,0 +1,30 @@
+#apiVersion: v1
+#kind: PersistentVolume
+#metadata:
+#  name: nfs-pv
+#  namespace: supabase-pg
+#spec:
+#  capacity:
+#    storage: 2Gi
+#  accessModes:
+#    - ReadWriteOnce
+#  storageClassName: ebs-sc
+#  persistentVolumeReclaimPolicy: Retain
+#  nfs:
+#    server: nfs-server.supabase-pg.svc.cluster.local
+#    server: 10.100.47.173
+#    path: "/"
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nfs
+  namespace: supabase-pg
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ebs-sc
+  resources:
+    requests:
+      storage: 1Gi
